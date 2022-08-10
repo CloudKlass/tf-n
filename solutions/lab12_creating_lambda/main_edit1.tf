@@ -18,20 +18,18 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "us-west-2"
 }
 
-resource "random_string" "bucketname" {  # Generate Random string to append to lab12 prefix
+resource "random_pet" "bucketname" {  # Generate Random string to append to lab12 prefix
   prefix = "lab12"
-  length = 6
-}
+ }
 
 resource "aws_s3_bucket" "lambda_bucket" { # Use generated string to create bucket
-  bucket = random_string.bucketname.id
-
-  acl           = "private"
+  bucket = random_pet.bucketname.id
   force_destroy = true
 }
+
                                             # Create Archive to prepare for upload to Lambda service
 data "archive_file" "lambda_archive" {
   type = "zip"
