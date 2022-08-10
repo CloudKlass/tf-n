@@ -21,8 +21,8 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "random_string" "bucketname" {  # Generate Random string to append to lab5 prefix
-  prefix = "lab5"
+resource "random_string" "bucketname" {  # Generate Random string to append to lab12 prefix
+  prefix = "lab12"
   length = 6
 }
 

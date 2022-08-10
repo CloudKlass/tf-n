@@ -21,8 +21,8 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "random_string" "bucketname" {  # Generate Random string to append to lab5 prefix
-  prefix = "lab5"
+resource "random_string" "bucketname" {  # Generate Random string to append to lab12 prefix
+  prefix = "lab12"
   length = 6
 }
 
@@ -123,19 +123,19 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "hello_Lab5" {
+resource "aws_apigatewayv2_integration" "hello_lab12" {
   api_id = aws_apigatewayv2_api.lambda.id
 
-  integration_uri    = aws_lambda_function.hello_Lab5.invoke_arn
+  integration_uri    = aws_lambda_function.hello_lab12.invoke_arn
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "hello_Lab5" {
+resource "aws_apigatewayv2_route" "hello_lab12" {
   api_id = aws_apigatewayv2_api.lambda.id
 
   route_key = "GET /hello"
-  target    = "integrations/${aws_apigatewayv2_integration.hello_Lab5.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.hello_lab12.id}"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
@@ -147,7 +147,7 @@ resource "aws_cloudwatch_log_group" "api_gw" {
 resource "aws_lambda_permission" "api_gw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.hello_Lab5.function_name
+  function_name = aws_lambda_function.hello_lab12.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"

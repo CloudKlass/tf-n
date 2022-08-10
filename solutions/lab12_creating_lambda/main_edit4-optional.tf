@@ -21,8 +21,8 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "random_string" "bucketname" {  # Generate Random string to append to lab5 prefix
-  prefix = "lab5"
+resource "random_string" "bucketname" {  # Generate Random string to append to lab12 prefix
+  prefix = "lab12"
   length = 6
 }
 
@@ -93,13 +93,13 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_apigatewayv2_api" "lambda_lab5" {
+resource "aws_apigatewayv2_api" "lambda_lab12" {
   name          = "lambda_gw"
   protocol_type = "HTTP"
 }
 
-resource "aws_apigatewayv2_stage" "lambda_lab5" {
-  api_id = aws_apigatewayv2_api.lambda_lab5.id
+resource "aws_apigatewayv2_stage" "lambda_lab12" {
+  api_id = aws_apigatewayv2_api.lambda_lab12.id
 
   name        = "lambda_stage"
   auto_deploy = true
@@ -123,23 +123,23 @@ resource "aws_apigatewayv2_stage" "lambda_lab5" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "hello_Lab5" {
-  api_id = aws_apigatewayv2_api.lambda_lab5.id
+resource "aws_apigatewayv2_integration" "hello_lab12" {
+  api_id = aws_apigatewayv2_api.lambda_lab12.id
 
-  integration_uri    = aws_lambda_function.hello_Lab5.invoke_arn
+  integration_uri    = aws_lambda_function.hello_lab12.invoke_arn
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "hello_Lab5" {
-  api_id = aws_apigatewayv2_api.lambda_lab5.id
+resource "aws_apigatewayv2_route" "hello_lab12" {
+  api_id = aws_apigatewayv2_api.lambda_lab12.id
 
   route_key = "GET /hello"
-  target    = "integrations/${aws_apigatewayv2_integration.hello_Lab5.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.hello_lab12.id}"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda_lab5.name}"
+  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda_lab12.name}"
 
   retention_in_days = 7
 }
@@ -147,10 +147,10 @@ resource "aws_cloudwatch_log_group" "api_gw" {
 resource "aws_lambda_permission" "api_gw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.hello_Lab5.function_name
+  function_name = aws_lambda_function.hello_lab12.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_apigatewayv2_api.lambda_lab5.execution_arn}/*/*"
+  source_arn = "${aws_apigatewayv2_api.lambda_lab12.execution_arn}/*/*"
 }
 
 # add dynamoDB to the solution - update lambda to query
