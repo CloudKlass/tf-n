@@ -55,8 +55,8 @@ resource "aws_lambda_function" "hello" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.lambda_upload.key
 
-  runtime = "nodejs14.x"
-  handler = "hello.handler"
+  runtime = "python3.9"
+  handler = "hello_world_python.lambda_handler"
 
   source_code_hash = data.archive_file.lambda_archive.output_base64sha256
 
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_log_group" "hello_lambdas" {
   retention_in_days = 7
 }
 
-resource "aws_iam_role" "lambda_IAM" {
+resource "aws_iam_role" "lambda_IAM" {  # Note Warning in Lab Guide if error occurs whilst using Cloud9
   name = "IAM_lambda"
 
   assume_role_policy = jsonencode({ # Defining IAM role and attaching trust policy
